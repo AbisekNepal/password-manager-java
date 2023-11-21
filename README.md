@@ -1,56 +1,66 @@
-# password-manager-java
- 
-# Password Generator Documentation
+# Password Generator Application
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Usage](#usage)
-- [Options](#options)
-- [Saving and Exporting](#saving-and-exporting)
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [License](#license)
+## Overview
 
-## Introduction
-Welcome to **myPassManager**, a simple yet powerful password generator and manager built in Java. This application allows you to generate strong, secure passwords for your various accounts and store them securely.
+The **Password Generator Application** is a Java-based desktop application that allows users to generate strong and secure passwords. The application provides a user-friendly interface where users can customize password criteria such as length, character types (alphabets, symbols, and numbers), and associate the generated password with specific accounts.
 
 ## Features
-- Password generation with customizable options
-- Save generated passwords along with website, username, and account type
-- Export all saved passwords to a text file
-- User-friendly graphical interface
+
+- **User-Friendly Interface**: The application features an intuitive and easy-to-use interface.
+- **Customizable Password Criteria**: Users can customize password length and choose to include alphabets, symbols, and numbers.
+- **Account Association**: Users can associate generated passwords with specific accounts, providing context for each password.
+- **Security Questions and Notes**: The application allows users to set up security questions and add notes for additional security and reference.
+- **Database Integration**: Passwords and associated information can be saved to a local MySQL database for future reference.
+
+## Getting Started
+
+To run the Password Generator Application, follow these steps:
+
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/abiseknepal/password-manager-java.git
+   ```
+
+2. **Run the Application:**
+   - Open the project in your preferred Java IDE.
+   - Locate the `passMaker` class and run the application.
 
 ## Usage
-1. **Website and Username**: Enter the website URL and your username for which you want to generate or save a password.
-2. **Account Type**: Select the account type from the dropdown menu (e.g., Office, School, Travel).
-3. **Password Length**: Adjust the slider to choose the length of the generated password (between 10 and 20 characters).
-4. **Character Options**: Check the options for including alphabets, symbols, and/or numbers in the generated password.
-5. **Generate Password**: Click the "Generate" button to create a new password based on your preferences.
-6. **Copy Password**: Click the "Copy" button to copy the generated password to the clipboard.
-7. **Save Password**: Click the "Save" button to store the generated password along with website, username, and account type in the database.
-8. **Export All**: Click the "Export All" button to export all saved passwords to a text file.
-9. **Quit**: Click the "Quit" button to exit the application.
 
-## Options
-- **Alphabets**: Include lowercase alphabets (x, y, z) in the password.
-- **Symbols**: Include symbols (@, #, !) in the password.
-- **Numbers**: Include numbers (1, 2, 3) in the password.
+1. **Generate Passwords:**
+   - Enter the required information such as website, username, and select an account type.
+   - Adjust the password length and choose character types.
+   - Click the "Generate" button to create a strong password.
 
-## Saving and Exporting
-- To save a password, ensure that the website, username, and password fields are filled, and an account type is selected. Click the "Save" button.
-- To export all saved passwords, click the "Export All" button. The passwords will be exported to a file named "passwords.txt."
+2. **Save Passwords:**
+   - Fill in the necessary details for website, username, and password.
+   - Select an account type and set up security questions if desired.
+   - Click the "Save" button to store the password in the local database.
 
-## Requirements
-- Java Runtime Environment (JRE) installed on your system.
-- MySQL database for saving and retrieving passwords.
+3. **Export Passwords:**
+   - Click the "Export All" button to export all stored passwords to a text file (`passwords.txt`).
 
-## Installation
-1. Download the Java source code file (`passMaker.java`) and ensure you have the necessary Java development tools installed.
-2. Set up a MySQL database with the name `myPassGenerate`.
-3. Compile and run the Java code to launch the application.
+4. **Security Questions and Notes:**
+   - Set up security questions and provide answers for added security.
+   - Add notes to store additional information related to the password.
+
+## Dependencies
+
+- Java Swing for the graphical user interface.
+- MySQL database for storing passwords and associated information.
+
+## Contributors
+
+- [Abisek]
 
 ## License
+
 This project is licensed under the [MIT License](LICENSE).
 
-Feel free to contribute or report issues on [GitHub](https://github.com/your/repository).
+## Acknowledgments
+
+- Special thanks to Professor Pipop for additional library of .jar file.
+
+---
+
+Feel free to contribute, report issues, or suggest enhancements. We appreciate your feedback!
