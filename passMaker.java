@@ -1,66 +1,65 @@
+package passwordGeneratorPkg;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextArea;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JRadioButton;
-import javax.swing.JSlider;
-import javax.imageio.ImageIO;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import java.awt.image.*;
-import java.io.File;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import javax.swing.ImageIcon;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-public class passMaker extends JFrame implements ActionListener{
-	
-	private JLabel headerText,label1,label2,label3,label11,label22,label33; //Declaring the label
+public class passMaker extends JFrame implements ActionListener {
+
+    private CardLayout cardLayout;
+    private JPanel cardPanel;
+    private JLabel headerText,label1,label2,label3,label11,label22,label33; //Declaring the label
 	private JTextField yourText, passwordText,websiteText,userNameText;
-	private JPanel northPanel,npOne,npTwo,npThree,npFour,npFive, nppOne,nppTwo,nppThree;
+	private JPanel northPanel,npOne,npTwo,npThree,npFour,npFive, nppOne,nppTwo,nppThree,dummyPanel;
 	private JCheckBox alphabetOption,symbolsOption,numberOption;
-	private JButton copyPassButton,generatePassButton,quitButton,saveButton,exportButton;
+	private JButton copyPassButton,generatePassButton;
 	private JPasswordField userPassField;
 	private JSlider slider;
 	private JComboBox accountOption;
+	
+	private JPanel panelNum2,pan1,pan2,pan3,pan4;
+	private JLabel securityQn,qLOne,qLTwo,ansLOne,ansLTwo,noteLabel;
+	private JTextField qTOne,qTTwo,ansTOne,ansTTwo;
+	private JTextArea noteTextArea;
+	private JButton quitButton,saveButton,exportButton;
 
-	
-	
-	public passMaker() {
-		
-		super("Password Generator");
-				
-		
-		northPanel = new JPanel();
+
+    public passMaker() {
+        super("Password Generator");
+
+        cardLayout = new CardLayout();
+        cardPanel = new JPanel(cardLayout);
+
+        createPageOne();
+        createPageTwo();
+
+        add(cardPanel);
+
+        setSize(500, 500);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    private void createPageOne() {
+        JPanel pageOne = new JPanel(new BorderLayout());
+        pageOne.setBackground(Color.RED); // Set the background color
+
+        northPanel = new JPanel();
 		northPanel.setLayout(new GridLayout(8,1));
 		
 		
@@ -81,8 +80,8 @@ public class passMaker extends JFrame implements ActionListener{
 			label1.setHorizontalAlignment(JLabel.CENTER);
 			
 		nppThree = new JPanel();
-		label33 = new JLabel("Account:");
-		String accountOpt[] = {"{select}","Personal","Office"};
+		label33 = new JLabel("*Account:");
+		String accountOpt[] = {"{select}","Office","School","Travel","Transportation","Health","Entertainment","Utility","Personal"};
 		accountOption = new JComboBox(accountOpt);
 			nppThree.add(label33);
 			nppThree.add(accountOption);
@@ -90,50 +89,22 @@ public class passMaker extends JFrame implements ActionListener{
 			northPanel.add(nppThree);
 			
 		nppOne = new JPanel();
-		label11 = new JLabel("Website:");
+		label11 = new JLabel("*Website:");
 		websiteText = new JTextField(15);
 			nppOne.add(label11);
 			nppOne.add(websiteText);
 			
 			northPanel.add(nppOne);
-			websiteText.addFocusListener(new FocusListener() {
-                public void focusGained(FocusEvent e) {
-                    if (websiteText.getText().equals("www.internet.com")) {
-                    	websiteText.setText("");
-                    	websiteText.setForeground(Color.BLACK);
-                    }
-                }
-
-                public void focusLost(FocusEvent e) {
-                    if (websiteText.getText().isEmpty()) {
-                    	websiteText.setText("www.internet.com");
-                    	websiteText.setForeground(Color.GRAY);
-                    }
-                }
-			});
+			
 			
 		nppTwo = new JPanel();
-		label22 = new JLabel("Username:");
+		label22 = new JLabel("*Username:");
 		userNameText = new JTextField(10);
 			nppTwo.add(label22);
 			nppTwo.add(userNameText);
 			
 			northPanel.add(nppTwo);
-			userNameText.addFocusListener(new FocusListener() {
-                public void focusGained(FocusEvent e) {
-                    if (userNameText.getText().equals("user123")) {
-                    	userNameText.setText("");
-                    	userNameText.setForeground(Color.BLACK);
-                    }
-                }
-
-                public void focusLost(FocusEvent e) {
-                    if (userNameText.getText().isEmpty()) {
-                    	userNameText.setText("user123");
-                    	userNameText.setForeground(Color.GRAY);
-                    }
-                }
-			});
+			
 		
 		npTwo = new JPanel();
 		label2 = new JLabel("Length:");
@@ -166,45 +137,135 @@ public class passMaker extends JFrame implements ActionListener{
 		npFive = new JPanel();
 		copyPassButton = new JButton("Copy");
 		generatePassButton = new JButton("Generate");
-		quitButton = new JButton("Quit");
-		saveButton = new JButton("Save");
-		exportButton = new JButton("Export All");
+		
 
 			npFive.add(copyPassButton);
 			npFive.add(generatePassButton);
-			npFive.add(saveButton);
-			npFive.add(exportButton);
-			npFive.add(quitButton);
+			
 			
 			northPanel.add(npFive);
 		
 		
 		copyPassButton.addActionListener(this);
 		generatePassButton.addActionListener(this);
-		quitButton.addActionListener(this);
+		
 		alphabetOption.addActionListener(this);
 	    symbolsOption.addActionListener(this);
 	    numberOption.addActionListener(this);
-	    saveButton.addActionListener(this);
-	    exportButton.addActionListener(this);
+	   
 
-		add(northPanel,BorderLayout.NORTH);
+	    pageOne.add(northPanel);
+
+        JButton nextPageButton = new JButton("Next");
+        nextPageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(cardPanel, "PageTwo");
+            }
+        });
+              
+
+        pageOne.add(nextPageButton, BorderLayout.SOUTH);
+
+        cardPanel.add(pageOne, "PageOne");
+    }
+
+    private void createPageTwo() {
+        JPanel pageTwo = new JPanel(new BorderLayout());
+        pageTwo.setBackground(Color.CYAN); // Set the background color
+
+        panelNum2 = new JPanel();
+		panelNum2.setLayout(new GridLayout(4,1));
 		
-		setVisible(true);
-		setSize(500,500);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+			
+		pan1 = new JPanel();
+		securityQn = new JLabel("Security Questions");
+			pan1.add(securityQn);
+			Font labelFont = new Font("Serif", Font.BOLD, 24);
+			securityQn.setFont(labelFont);
+			panelNum2.add(pan1);
+			securityQn.setHorizontalAlignment(JLabel.CENTER);
+			
+			pan2 = new JPanel();
+			pan2.setLayout(new GridLayout(4, 2));
+			qLOne = new JLabel("Question 1:");
+			qTOne = new JTextField(10);
+			ansLOne = new JLabel("Answer 1:");
+			ansTOne = new JTextField(10);
 
-	}
+			qLTwo = new JLabel("Question 2:");
+			qTTwo = new JTextField(10);
+			ansLTwo = new JLabel("Answer 2:");
+			ansTTwo = new JTextField(10);
+
+			pan2.add(qLOne);
+			pan2.add(qTOne);
+			pan2.add(ansLOne);
+			pan2.add(ansTOne);
+
+			pan2.add(qLTwo);
+			pan2.add(qTTwo);
+			pan2.add(ansLTwo);
+			pan2.add(ansTTwo);
+
+			// Add padding to pan2
+			int padding = 50; // You can adjust the padding value as needed
+			pan2.setBorder(BorderFactory.createEmptyBorder(0, padding, 0, padding));
+
+			panelNum2.add(pan2);
+		
+		pan3 = new JPanel();
+		pan3.setLayout(new GridLayout(2,1));
+			noteLabel = new JLabel("Notes:");
+			noteLabel.setHorizontalAlignment(JLabel.CENTER);
+			noteTextArea = new JTextArea();
+			
+			pan3.add(noteLabel);
+			pan3.add(noteTextArea);
+			
+			pan3.setBorder(BorderFactory.createEmptyBorder(0, padding, 0, padding));
+			
+			panelNum2.add(pan3);
+			
+		pan4 = new JPanel();
+		quitButton = new JButton("Quit");
+		saveButton = new JButton("Save");
+		exportButton = new JButton("Export All");
+		
+		pan4.add(quitButton);
+		pan4.add(saveButton);
+		pan4.add(exportButton);
+		
+		pan4.setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));
+		
+		panelNum2.add(pan4);
+		
+		 quitButton.addActionListener(this);
+		 saveButton.addActionListener(this);
+		 exportButton.addActionListener(this);
+		
+		pageTwo.add(panelNum2);
+        JButton previousPageButton = new JButton("Previous");
+        previousPageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(cardPanel, "PageOne");
+            }
+        });
+
+        pageTwo.add(previousPageButton, BorderLayout.SOUTH);
+
+        cardPanel.add(pageTwo, "PageTwo");
+    }
 
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new passMaker());
+    }
 
-	
-	public static void main(String[] args) {
-		passMaker app = new passMaker();
-	}
-
-	public void actionPerformed(ActionEvent event) {
+    @Override
+    public void actionPerformed(ActionEvent event) {
 		String newPass = " ";
         int passLength = 0;
         passLength = slider.getValue();
@@ -243,26 +304,30 @@ public class passMaker extends JFrame implements ActionListener{
 	    }
 
 	}
-	
-	  private void exportPasswordToFile() {
+    private void exportPasswordToFile() {
 		  try {
 	            Class.forName("com.mysql.jdbc.Driver");
 
 	            String URL = "jdbc:mysql://localhost/myPassGenerate?user=root&password=";
 	            Connection conn = DriverManager.getConnection(URL);
 	            System.out.println("Login Successfully");
-	            String query = "SELECT website, username, password, account_type FROM passwords;";
+	            String query = "SELECT website, username, password, account_type, Question1, Answer1, Question2, Answer2, Notes FROM passwords;";
 
 	            Statement stmt = conn.createStatement();
 	            ResultSet result = stmt.executeQuery(query);
 
 	            // Create a BufferedWriter to write to the text file
 	            try (BufferedWriter writer = new BufferedWriter(new FileWriter("passwords.txt"))) {
-	                while (result.next()) {
+	            	while (result.next()) {
 	                    String website = result.getString("website");
 	                    String username = result.getString("username");
 	                    String password = result.getString("password");
 	                    String accountType = result.getString("account_type");
+	                    String question1 = result.getString("Question1");
+	                    String answer1 = result.getString("Answer1");
+	                    String question2 = result.getString("Question2");
+	                    String answer2 = result.getString("Answer2");
+	                    String notes = result.getString("Notes");
 
 	                    writer.write("Website: " + website);
 	                    writer.newLine();
@@ -272,7 +337,17 @@ public class passMaker extends JFrame implements ActionListener{
 	                    writer.newLine();
 	                    writer.write("Account Type: " + accountType);
 	                    writer.newLine();
-	                    writer.newLine(); 
+	                    writer.write("Question 1: " + question1);
+	                    writer.newLine();
+	                    writer.write("Answer 1: " + answer1);
+	                    writer.newLine();
+	                    writer.write("Question 2: " + question2);
+	                    writer.newLine();
+	                    writer.write("Answer 2: " + answer2);
+	                    writer.newLine();
+	                    writer.write("Notes: " + notes);
+	                    writer.newLine();
+	                    writer.newLine();
 	                }
 	            }
 
@@ -289,38 +364,90 @@ public class passMaker extends JFrame implements ActionListener{
 
 
 
-	private void saveToDatabase() {
-		  String website = websiteText.getText();
-	        String username = userNameText.getText();
-	        String generatedPassword = passwordText.getText();
-	        String accountType = accountOption.getSelectedItem().toString();
-		try {
-				Class.forName("com.mysql.jdbc.Driver");
-				
-				String URL = "jdbc:mysql://localhost/myPassGenerate?user=root&password=";
-				Connection conn = DriverManager.getConnection(URL);
-				System.out.println("Login Successfully");
-				String insert = "INSERT INTO passwords (website, username, password, account_type) " +
-	                    "VALUES ('" + website + "', '" + username + "', '" + generatedPassword + "', '" + accountType + "');";
-				
-				
-				Statement stmt = conn.createStatement();
-				boolean didItWork = stmt.execute(insert);
-				if (!didItWork) {
-				System.out.println("command ran successfully");
-				}else {
-					System.out.println("command run failed!");
+    private void saveToDatabase() {
+    	String website = websiteText.getText();
+        String username = userNameText.getText();
+        String generatedPassword = passwordText.getText();
+        String accountType = accountOption.getSelectedItem().toString();
+        String question1 = qTOne.getText();
+        String answer1 = ansTOne.getText();
+        String question2 = qTTwo.getText();
+        String answer2 = ansTTwo.getText();
+        String notes = noteTextArea.getText();
 
-				}
-				
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+        // Display information in a new JFrame
+        JFrame infoFrame = new JFrame("Saved Information");
+        JPanel infoPanel = new JPanel();
+        
+        JPanel subPanel = new JPanel(new GridLayout(9,1));
+        subPanel.add(new JLabel("Website: "+website));
+        subPanel.add(new JLabel("Username: "+username));
+        subPanel.add(new JLabel("Generated Password: "+generatedPassword));
+        subPanel.add(new JLabel("Account Type: "+accountType));
+        subPanel.add(new JLabel("Question 1: "+question1));
+        subPanel.add(new JLabel("Answer 1: "+answer1));
+        subPanel.add(new JLabel("Question 2: "+question2));
+        subPanel.add(new JLabel("Answer 2: "+answer2));
+        subPanel.add(new JLabel("Notes: "+notes));
+
+        infoPanel.add(subPanel);
+        JButton saveButton = new JButton("Save to Database");
+        JButton cancelButton = new JButton("Cancel");
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform save to database action here
+                saveToDatabaseAction(website,username,generatedPassword,accountType,question1,answer1,question2,answer2,notes);
+                // Close the information display frame
+                infoFrame.dispose();
+            }
+        });
+
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Close the information display frame without saving to the database
+                infoFrame.dispose();
+            }
+        });
+
+        infoPanel.add(saveButton);
+        infoPanel.add(cancelButton);
+
+        infoFrame.add(infoPanel);
+        infoFrame.setSize(300, 220);
+        infoFrame.setLocationRelativeTo(null);
+        infoFrame.setVisible(true);
+    }
+
+    private void saveToDatabaseAction(String website, String username, String generatedPassword, String accountType, String question1, String answer1, String question2, String answer2, String notes) {
+    	try {
+			Class.forName("com.mysql.jdbc.Driver");
 			
-		} catch (ClassNotFoundException e) {
+			String URL = "jdbc:mysql://localhost/myPassGenerate?user=root&password=";
+			Connection conn = DriverManager.getConnection(URL);
+			System.out.println("Login Successfully");
+			String insert = "INSERT INTO passwords (website, username, password, account_type, Question1, Answer1, Question2, Answer2, Notes) " +
+                    "VALUES ('" + website + "', '" + username + "', '" + generatedPassword + "', '" + accountType + "', '" + question1 + "', '" + answer1 + "', '" + question2 + "', '" + answer2 + "', '" + notes + "');";
+			
+			
+			Statement stmt = conn.createStatement();
+			boolean didItWork = stmt.execute(insert);
+			if (!didItWork) {
+			System.out.println("command ran successfully");
+			}else {
+				System.out.println("command run failed!");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		
+	} catch (ClassNotFoundException e) {
+		e.printStackTrace();
 	}
+    }
 
 
 
@@ -363,7 +490,7 @@ public class passMaker extends JFrame implements ActionListener{
 		if(includeNum)
 			characters += numbers;
 		if (characters.isEmpty())
-	        return "--------"; 
+	        return "********************"; 
 
 		
 		for(int i = 0; i < passLength;i++) {
@@ -375,7 +502,4 @@ public class passMaker extends JFrame implements ActionListener{
 		
 	}
 
-
-
 }
-
